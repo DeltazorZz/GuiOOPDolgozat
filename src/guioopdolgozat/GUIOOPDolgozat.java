@@ -10,14 +10,20 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.TileObserver;
+import java.util.ArrayList;
+import java.util.Collections;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
@@ -75,7 +81,7 @@ public class GUIOOPDolgozat {
         JPanel pinpanel = new JPanel(gomblayout);
         pinpanel.setBorder(new TitledBorder("Pin Kód"));
 
-        JPanel beallitpanel = new JPanel();
+        JPanel beallitpanel = new JPanel(beallitlayout);
         beallitpanel.setBorder(new TitledBorder("Beállítás"));
 
         JPanel bejelentkezpanel = new JPanel(belayout);
@@ -83,12 +89,12 @@ public class GUIOOPDolgozat {
         bejelentkezpanel.add(beallitpanel);
 
         /*jatek oldal*/
-        JPanel amobapanel = new JPanel();
+        JPanel amobapanel = new JPanel(gomblayout);
         amobapanel.setBorder(new TitledBorder("Amőba"));
         JPanel jatekbeallitpanel = new JPanel();
         jatekbeallitpanel.setBorder(new TitledBorder("Beállítás"));
 
-        JPanel jatekpanel = new JPanel();
+        JPanel jatekpanel = new JPanel(belayout);
         jatekpanel.add(amobapanel);
         jatekpanel.add(jatekbeallitpanel);
 
@@ -146,31 +152,82 @@ public class GUIOOPDolgozat {
         gombok[9] = gomb0;
 
         /*Beallitas*/
-        JCheckBox kever = new JCheckBox();
+        JCheckBox kever = new JCheckBox("Kever");
+        kever.addActionListener(new KeverListener());
         JLabel kod = new JLabel("kód:");
         JTextField kodhely = new JTextField();
         kodhely.enableInputMethods(false);
+        
+        beallitpanel.add(kever);
+        beallitpanel.add(kod);
+        beallitpanel.add(kodhely);
+        
+        /*Amoba oldal*/
+        JButton amoba1 = new JButton();
+        JButton amoba2 = new JButton();
+        JButton amoba3 = new JButton();
+        JButton amoba4 = new JButton();
+        JButton amoba5 = new JButton();
+        JButton amoba6 = new JButton();
+        JButton amoba7 = new JButton();
+        JButton amoba8 = new JButton();
+        JButton amoba9 = new JButton();
+        
+        amobapanel.add(amoba1);
+        amobapanel.add(amoba2);
+        amobapanel.add(amoba3);
+        amobapanel.add(amoba4);
+        amobapanel.add(amoba5);
+        amobapanel.add(amoba6);
+        amobapanel.add(amoba7);
+        amobapanel.add(amoba8);
+        amobapanel.add(amoba9);
+        
+        JScrollPane scroll = new JScrollPane();
+        String[] listaelem = {"3x3","4x4","5x5"};
+        JList list = new JList(listaelem);
+        scroll.add(list);
+        ButtonGroup radioGroup = new ButtonGroup();
+        JRadioButton radio1 = new JRadioButton();
+        JRadioButton radio2 = new JRadioButton();
+        radioGroup.add(radio1);
+        radio1.setText("X kezd");
+        radioGroup.add(radio2);
+        radio2.setText("O kezd");
+        
+        jatekbeallitpanel.add(list);
+        jatekbeallitpanel.add(scroll);
+        jatekbeallitpanel.add(radio1);
+        jatekbeallitpanel.add(radio2);
+               
+                
 
         frame.setVisible(true);
     }
 
+
+
+    }
+    class KeverListener implements ActionListener{
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        List<JButton> gomb = Arrays.asList(gombok); 
+        
+        Collections.shuffle(gombok);
+
+        
+    }
+    
+    }
     class PinActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton gomb = (JButton)e.getSource();
-            String felirat = gomb.getActionCommand();
-            String eredmeny = null;
-            for (int i = 0; i < gombok.length; i++) {
-                eredmeny = String.valueOf(gombok[i]);
-            }
-            
-            if (eredmeny == null ? felirat == null : eredmeny.equals(felirat)) {
-                gomb.setBackground(Color.CYAN);
-            }
+            gomb.setBackground(Color.CYAN);
+        }
             
             
         }
-
-    }
 }
