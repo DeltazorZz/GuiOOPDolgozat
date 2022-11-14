@@ -9,6 +9,8 @@ import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.TileObserver;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +23,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -46,7 +49,7 @@ public class GUIOOPDolgozat {
     private void ini() {
         /*A fő ablak*/
         frame = new JFrame("GUI-OOP Dolgozat 1.");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         Dimension kep = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setBounds(kep.width / 2 - 150, kep.height / 2 - 125, 410, 350);
 
@@ -61,6 +64,7 @@ public class GUIOOPDolgozat {
         /*Program Menu*/
         JMenuItem mnuprgujra = new JMenuItem("Újra");
         JMenuItem mnuprgkilep = new JMenuItem("Kilépés");
+        mnuprgkilep.addActionListener(new Kilepes());
         mnuprg.add(mnuprgujra);
         mnuprg.addSeparator();
         mnuprg.add(mnuprgkilep);
@@ -157,11 +161,11 @@ public class GUIOOPDolgozat {
         JLabel kod = new JLabel("kód:");
         JTextField kodhely = new JTextField();
         kodhely.enableInputMethods(false);
-        
+
         beallitpanel.add(kever);
         beallitpanel.add(kod);
         beallitpanel.add(kodhely);
-        
+
         /*Amoba oldal*/
         JButton amoba1 = new JButton();
         JButton amoba2 = new JButton();
@@ -172,7 +176,7 @@ public class GUIOOPDolgozat {
         JButton amoba7 = new JButton();
         JButton amoba8 = new JButton();
         JButton amoba9 = new JButton();
-        
+
         amobapanel.add(amoba1);
         amobapanel.add(amoba2);
         amobapanel.add(amoba3);
@@ -182,9 +186,9 @@ public class GUIOOPDolgozat {
         amobapanel.add(amoba7);
         amobapanel.add(amoba8);
         amobapanel.add(amoba9);
-        
+
         JScrollPane scroll = new JScrollPane();
-        String[] listaelem = {"3x3","4x4","5x5"};
+        String[] listaelem = {"3x3", "4x4", "5x5"};
         JList list = new JList(listaelem);
         scroll.add(list);
         ButtonGroup radioGroup = new ButtonGroup();
@@ -194,40 +198,59 @@ public class GUIOOPDolgozat {
         radio1.setText("X kezd");
         radioGroup.add(radio2);
         radio2.setText("O kezd");
-        
+
         jatekbeallitpanel.add(list);
         jatekbeallitpanel.add(scroll);
         jatekbeallitpanel.add(radio1);
         jatekbeallitpanel.add(radio2);
-               
-                
 
+         frame.addWindowListener(new FormWindowAdapter());
+        
         frame.setVisible(true);
     }
 
+    class KeverListener implements ActionListener {
 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            Collections.shuffle(gombok);
+
+        }
 
     }
-    class KeverListener implements ActionListener{
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        List<JButton> gomb = Arrays.asList(gombok); 
-        
-        Collections.shuffle(gombok);
-
-        
-    }
-    
-    }
     class PinActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JButton gomb = (JButton)e.getSource();
+            JButton gomb = (JButton) e.getSource();
             gomb.setBackground(Color.CYAN);
         }
-            
-            
+
+    }
+    class FormWindowAdapter extends WindowAdapter{
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            super.windowClosing(e); 
+            kilep();
         }
+    
+    }
+
+    class Kilepes implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            kilep();
+        }
+    }
+    private void kilep(){
+    int valasz = JOptionPane.showConfirmDialog(frame, "Kilépés", "Biztos kilép?", JOptionPane.YES_NO_OPTION);
+            if (valasz == JOptionPane.YES_OPTION) {
+                System.exit(valasz);
+    }
+}
+
 }
