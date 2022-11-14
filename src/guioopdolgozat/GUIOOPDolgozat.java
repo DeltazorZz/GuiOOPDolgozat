@@ -15,6 +15,7 @@ import java.awt.image.TileObserver;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -41,9 +42,20 @@ public class GUIOOPDolgozat {
 
     private JFrame frame;
     private JButton[] gombok;
+    private JCheckBox kever;
+    private JPanel pinpanel;
+    private JPanel beallitpanel;
+    private JPanel amobapanel;
+    private JPanel jatekpanel;
+    private JButton gomb0, gomb1, gomb2, gomb3, gomb4, gomb5, gomb6, gomb7, gomb8, gomb9;
+    private JTextField kodhely;
+    private JPanel jatekbeallitpanel;
+    String kiiras = "";
 
     public GUIOOPDolgozat() {
         ini();
+        PinGombok();
+        BeallitasGombok();
     }
 
     private void ini() {
@@ -64,6 +76,7 @@ public class GUIOOPDolgozat {
         /*Program Menu*/
         JMenuItem mnuprgujra = new JMenuItem("Újra");
         JMenuItem mnuprgkilep = new JMenuItem("Kilépés");
+        mnuprgujra.addActionListener(new MenuUjra());
         mnuprgkilep.addActionListener(new Kilepes());
         mnuprg.add(mnuprgujra);
         mnuprg.addSeparator();
@@ -77,15 +90,17 @@ public class GUIOOPDolgozat {
 
         /*Tartalom*/
  /*Layout managers*/
-        LayoutManager gomblayout = new GridLayout(3, 3);
+        LayoutManager gomblayout = new GridLayout(3, 2);
         LayoutManager belayout = new GridLayout(1, 2);
-        LayoutManager beallitlayout = new GridLayout(1, 1);
+        LayoutManager beallitlayout = new GridLayout(1, 3);
+        
 
         /*Bejelentkezés oldal*/
-        JPanel pinpanel = new JPanel(gomblayout);
+        pinpanel = new JPanel(gomblayout);
         pinpanel.setBorder(new TitledBorder("Pin Kód"));
+    
 
-        JPanel beallitpanel = new JPanel(beallitlayout);
+        beallitpanel = new JPanel(beallitlayout);
         beallitpanel.setBorder(new TitledBorder("Beállítás"));
 
         JPanel bejelentkezpanel = new JPanel(belayout);
@@ -93,12 +108,12 @@ public class GUIOOPDolgozat {
         bejelentkezpanel.add(beallitpanel);
 
         /*jatek oldal*/
-        JPanel amobapanel = new JPanel(gomblayout);
+        amobapanel = new JPanel(gomblayout);
         amobapanel.setBorder(new TitledBorder("Amőba"));
-        JPanel jatekbeallitpanel = new JPanel();
+        jatekbeallitpanel = new JPanel(beallitlayout);
         jatekbeallitpanel.setBorder(new TitledBorder("Beállítás"));
 
-        JPanel jatekpanel = new JPanel(belayout);
+        jatekpanel = new JPanel(belayout);
         jatekpanel.add(amobapanel);
         jatekpanel.add(jatekbeallitpanel);
 
@@ -106,20 +121,25 @@ public class GUIOOPDolgozat {
         JTabbedPane oldalak = new JTabbedPane();
         oldalak.addTab("Bejelentkezés", bejelentkezpanel);
         oldalak.addTab("Játék", jatekpanel);
-        frame.add(oldalak);
+        frame.getContentPane().add(oldalak);
 
         /*Bejelentkezés oldal funkciok*/
-        //Pin kód Gombok
-        JButton gomb0 = new JButton("0");
-        JButton gomb1 = new JButton("1");
-        JButton gomb2 = new JButton("2");
-        JButton gomb3 = new JButton("3");
-        JButton gomb4 = new JButton("4");
-        JButton gomb5 = new JButton("5");
-        JButton gomb6 = new JButton("6");
-        JButton gomb7 = new JButton("7");
-        JButton gomb8 = new JButton("8");
-        JButton gomb9 = new JButton("9");
+        frame.addWindowListener(new FormWindowAdapter());
+
+        frame.setVisible(true);
+    }
+
+    private void PinGombok() {
+        gomb0 = new JButton("0");
+        gomb1 = new JButton("1");
+        gomb2 = new JButton("2");
+        gomb3 = new JButton("3");
+        gomb4 = new JButton("4");
+        gomb5 = new JButton("5");
+        gomb6 = new JButton("6");
+        gomb7 = new JButton("7");
+        gomb8 = new JButton("8");
+        gomb9 = new JButton("9");
 
         pinpanel.add(gomb1);
         pinpanel.add(gomb2);
@@ -154,12 +174,13 @@ public class GUIOOPDolgozat {
         gombok[7] = gomb8;
         gombok[8] = gomb9;
         gombok[9] = gomb0;
+    }
 
-        /*Beallitas*/
-        JCheckBox kever = new JCheckBox("Kever");
+    private void BeallitasGombok() {
+        kever = new JCheckBox("Kever");
         kever.addActionListener(new KeverListener());
         JLabel kod = new JLabel("kód:");
-        JTextField kodhely = new JTextField();
+        kodhely = new JTextField();
         kodhely.enableInputMethods(false);
 
         beallitpanel.add(kever);
@@ -187,10 +208,9 @@ public class GUIOOPDolgozat {
         amobapanel.add(amoba8);
         amobapanel.add(amoba9);
 
-        JScrollPane scroll = new JScrollPane();
         String[] listaelem = {"3x3", "4x4", "5x5"};
         JList list = new JList(listaelem);
-        scroll.add(list);
+        JScrollPane scroll = new JScrollPane(list);
         ButtonGroup radioGroup = new ButtonGroup();
         JRadioButton radio1 = new JRadioButton();
         JRadioButton radio2 = new JRadioButton();
@@ -199,58 +219,102 @@ public class GUIOOPDolgozat {
         radioGroup.add(radio2);
         radio2.setText("O kezd");
 
-        jatekbeallitpanel.add(list);
+        
         jatekbeallitpanel.add(scroll);
         jatekbeallitpanel.add(radio1);
         jatekbeallitpanel.add(radio2);
-
-         frame.addWindowListener(new FormWindowAdapter());
-        
-        frame.setVisible(true);
     }
 
-    class KeverListener implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
+class KeverListener implements ActionListener {
 
-            Collections.shuffle(gombok);
+    @Override
+    public void actionPerformed(ActionEvent e) {
 
-        }
+        if (kever.isSelected()) {
+            ArrayList<Integer> checkbox = new ArrayList<>();
+            for (int i = 0; i < Bejelent_Gombok; i++) {
+                checkbox.add(i);
+            }
+            Collections.shuffle(checkbox);
+            gombok[checkbox.get(0)] = gomb1;
+            gombok[checkbox.get(1)] = gomb2;
+            gombok[checkbox.get(2)] = gomb3;
+            gombok[checkbox.get(3)] = gomb4;
+            gombok[checkbox.get(4)] = gomb5;
+            gombok[checkbox.get(5)] = gomb6;
+            gombok[checkbox.get(6)] = gomb7;
+            gombok[checkbox.get(7)] = gomb8;
+            gombok[checkbox.get(8)] = gomb9;
+            gombok[checkbox.get(9)] = gomb0;
 
-    }
-
-    class PinActionListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JButton gomb = (JButton) e.getSource();
-            gomb.setBackground(Color.CYAN);
-        }
-
-    }
-    class FormWindowAdapter extends WindowAdapter{
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            super.windowClosing(e); 
-            kilep();
-        }
-    
-    }
-
-    class Kilepes implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            kilep();
+            for (JButton g : gombok) {
+                pinpanel.add(g);
+            }
+           frame.validate();
+        } else if (!(kever.isSelected())) {
+            for (JButton g : gombok) {
+                pinpanel.remove(g);
+                
+            }
+            PinGombok();
         }
     }
-    private void kilep(){
-    int valasz = JOptionPane.showConfirmDialog(frame, "Kilépés", "Biztos kilép?", JOptionPane.YES_NO_OPTION);
-            if (valasz == JOptionPane.YES_OPTION) {
-                System.exit(valasz);
+
+}
+
+class MenuUjra implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ujJatek();
+    }
+
+    private void ujJatek() {
+        kodhely.setText("");
+        pinpanel.removeAll();
+        kever.setSelected(false);
+        frame.validate();
+        PinGombok();
     }
 }
 
+class PinActionListener implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton gomb = (JButton) e.getSource();
+        String felirat = gomb.getActionCommand();
+        gomb.setBackground(Color.CYAN);
+          kiiras += felirat;
+          kodhely.setText(kiiras);
+           
+    }
+
+}
+
+class FormWindowAdapter extends WindowAdapter {
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        super.windowClosing(e);
+        kilep();
+    } 
+
+}
+
+class Kilepes implements ActionListener {
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        kilep();
+    }
+}
+
+private void kilep() {
+        int valasz = JOptionPane.showConfirmDialog(frame, "Kilépés", "Biztos kilép?", JOptionPane.YES_NO_OPTION);
+        if (valasz == JOptionPane.YES_OPTION) {
+            System.exit(valasz);
+        }
+    }
 }
